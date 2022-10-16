@@ -1,0 +1,42 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="mt-4">
+                    <form action="/save-data" method="post">
+                        <div class="col-md-6">
+                            <label for="exampleFormControlTextarea1" class="form-label">Contraseña (16 o 32 Caracteres)</label>
+                            <input type="password" class="form-control" name="password">
+                        </div>
+                        <label for="exampleFormControlTextarea1" class="mt-2 form-label">Mensaje</label>
+                        <textarea name="note" class="form-control" id="exampleFormControlTextarea1" rows="10"></textarea>
+                        <button class="mt-2 btn btn-dark" type="submit"><i class="fas fa-save"></i> Guardar</button>
+                    </form>
+                  </div>
+            </div>
+        </div>
+        <div class="row mt-2" data-masonry='{"percentPosition": true }' style="height: 600px; overflow-y: scroll;">
+            {% for item in data %}
+                <div class="col-sm-4 col-md-4 py-3">
+                    <div class="card">
+                        <div class="card-body p-4">
+                            <h5 style="font-size: 15px;" class="card-title"> <i class="fas fa-address-card"></i> Fecha de creación: {{item.date}}</h5>
+                            {% if item.encrypt == true %}
+                                <p class="card-text">{{item.msg}}</p>
+                                <button onclick="window.location.href='/decrypt/{{item.uuid}}';"  role="button" class="btn btn-sm btn-primary"><i class="fa fa-shield-alt"></i> Desencriptar</a>
+                            {% else %}
+                                <p class="card-text"><pre>{{item.msg}}</pre></p>
+                            {% endif %}
+                            <form action="/delete-data" method="post">
+                                <input type="hidden" name="uuid" value="{{item.uuid}}">
+                                <button type="submit" class="btn btn-sm btn-dark"><i class="fa fa-trash"></i> Eliminar</a>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
